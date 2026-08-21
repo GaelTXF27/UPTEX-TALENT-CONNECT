@@ -25,6 +25,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
         }
 
         /* BARRA DE NAVEGACIÓN SUPERIOR */
@@ -292,10 +293,13 @@
             .main-container {
                 flex-direction: column;
                 padding: 30px 20px;
+                gap: 28px;
             }
+            .info-section { width: 100%; }
             .login-wrapper {
                 width: 100%;
                 max-width: 420px;
+                flex-basis: auto;
             }
             .info-section h1 {
                 font-size: 36px;
@@ -305,9 +309,15 @@
         @media (max-width: 576px) {
             .navbar-top {
                 padding: 15px 20px;
-                flex-direction: column;
+                flex-direction: row;
                 gap: 15px;
             }
+            .navbar-brand { font-size: 20px; }
+            .btn-nav { padding: 8px 14px; font-size: 14px; }
+            .main-container { padding: 22px 14px; }
+            .info-section h1 { font-size: 30px; }
+            .info-section p { font-size: 15px; }
+            .login-container { padding: 28px 18px; }
         }
     </style>
 </head>

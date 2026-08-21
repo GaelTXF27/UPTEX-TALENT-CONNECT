@@ -299,11 +299,19 @@
 
         @media (max-width: 760px) {
             body { display: block; }
-            .sidebar { width: min(86vw, var(--sidebar-width)); }
-            .sidebar.oculto { transform: translateX(-100%); }
+            .sidebar {
+                width: min(82vw, var(--sidebar-width));
+                transform: translateX(-100%);
+                box-shadow: 0 20px 45px rgba(0,0,0,0.18);
+            }
+            .sidebar:not(.oculto) { transform: translateX(0); }
             .wrapper { margin-left: 0; width: 100%; }
-            .dashboard-content { padding: 20px; }
+            .navbar { padding: 12px 16px; gap: 12px; }
+            .usuario-info { justify-content: flex-end; gap: 10px; }
+            .dashboard-content { padding: 18px 14px; }
             .header-acciones { align-items: flex-start; flex-direction: column; }
+            .acciones-exportar { width: 100%; }
+            .btn-exportar { flex: 1 1 145px; justify-content: center; }
             .charts-grid { grid-template-columns: 1fr; }
             .perfil-grid { grid-template-columns: 1fr; }
         }
@@ -335,7 +343,7 @@
         window.addEventListener('pageshow', validarSesionActiva);
     </script>
 
-    <aside class="sidebar" id="sidebar">
+    <aside class="sidebar oculto" id="sidebar">
         <div class="sidebar-header">Portal Egresado</div>
         <div class="sidebar-profile">
             <div class="sidebar-profile-icon" id="sideAvatar"><i class="fas fa-user-graduate"></i></div>
@@ -499,6 +507,7 @@
         let notificacionesLeidas = sessionStorage.getItem('egresado_notificaciones_leidas') === '1';
 
         document.addEventListener('DOMContentLoaded', function() {
+            ajustarSidebarInicial();
             document.getElementById('nombreDisplay').textContent = sessionStorage.getItem('usuario_nombre') || 'Usuario';
             document.getElementById('rolDisplay').textContent = sessionStorage.getItem('usuario_rol') || 'Perfil';
             document.getElementById('sideNombre').textContent = sessionStorage.getItem('usuario_nombre') || 'Usuario';
@@ -508,6 +517,19 @@
             document.getElementById('form-perfil-egresado')?.addEventListener('submit', guardarPerfilEgresado);
             habilitarArrastrePanelNotificaciones('panelNotificaciones', 'panelNotificacionesHeader');
         });
+
+        window.addEventListener('resize', ajustarSidebarInicial);
+
+        function ajustarSidebarInicial() {
+            const sidebar = document.getElementById('sidebar');
+            if (!sidebar) return;
+
+            if (window.innerWidth > 760) {
+                sidebar.classList.remove('oculto');
+            } else {
+                sidebar.classList.add('oculto');
+            }
+        }
 
         document.addEventListener('click', function(event) {
             const contenedor = document.querySelector('.notificaciones');

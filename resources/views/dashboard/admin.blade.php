@@ -49,6 +49,7 @@
         /* Transiciones suaves para la sidebar */
         .sidebar-transition { transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        .mobile-menu-trigger { display: none; }
         
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -66,6 +67,50 @@
         @keyframes toastLeave {
             from { transform: translateX(0); opacity: 1; }
             to { transform: translateX(100%); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                display: block;
+                min-height: 100vh;
+                overflow: hidden;
+            }
+
+            #sidebar {
+                position: fixed;
+                inset: 0 auto 0 0;
+                height: 100vh;
+                width: min(82vw, 16rem) !important;
+                transform: translateX(-100%);
+                box-shadow: 0 20px 45px rgba(0, 0, 0, 0.18);
+            }
+
+            #sidebar.sidebar-mobile-open {
+                transform: translateX(0);
+            }
+
+            #sidebar .menu-text,
+            #sidebar-title {
+                display: inline !important;
+                opacity: 1 !important;
+            }
+
+            main {
+                width: 100%;
+                height: 100vh;
+            }
+
+            header {
+                min-height: 4rem;
+            }
+
+            .mobile-menu-trigger {
+                display: flex;
+            }
+
+            .tab-content {
+                min-width: 0;
+            }
         }
     </style>
 
@@ -140,7 +185,10 @@
     <main class="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         <!-- Top Navbar -->
         <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 sm:px-6 lg:px-8 shadow-sm z-30">
-            <div class="flex items-center">
+            <div class="flex items-center gap-3 min-w-0">
+                <button onclick="toggleSidebar()" class="mobile-menu-trigger text-uptex-green hover:bg-uptex-lightgreen w-10 h-10 rounded-lg transition-colors items-center justify-center shrink-0" title="Abrir menu">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <h1 class="text-xl font-bold text-uptex-green hidden sm:block">Bolsa de Trabajo Inteligente - UPTeX</h1>
                 <h1 class="text-lg font-bold text-uptex-green sm:hidden">UPTeX</h1>
             </div>
@@ -496,6 +544,11 @@
             const sidebar = document.getElementById('sidebar');
             const texts = document.querySelectorAll('.menu-text');
             const title = document.getElementById('sidebar-title');
+
+            if (window.innerWidth <= 768) {
+                sidebar.classList.toggle('sidebar-mobile-open');
+                return;
+            }
             
             if (sidebar.classList.contains('w-64')) {
                 sidebar.classList.replace('w-64', 'w-16');
@@ -533,7 +586,7 @@
             // Auto colapsar en moviles
             if (window.innerWidth <= 768) {
                 const sidebar = document.getElementById('sidebar');
-                if(sidebar.classList.contains('w-64')) toggleSidebar();
+                sidebar.classList.remove('sidebar-mobile-open');
             }
         }
 

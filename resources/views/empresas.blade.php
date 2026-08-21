@@ -37,13 +37,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             border-bottom: 4px solid var(--uptex-rojo);
             z-index: 10;
         }
 
         .navbar h1 { color: var(--uptex-verde); margin: 0; font-size: 24px; font-weight: 800; }
-        .navbar .usuario-info { font-weight: 600; font-size: 14px; }
+        .navbar .usuario-info { font-weight: 600; font-size: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
         .btn-salir { color: var(--uptex-rojo); text-decoration: none; margin-left: 15px; font-weight: bold; }
 
         /* Contenedor Principal */
@@ -217,7 +219,8 @@
             body { height: auto; min-height: 100vh; overflow: auto; }
             .main-container { padding: 16px; overflow: visible; }
             .navbar { padding: 14px 16px; align-items: flex-start; gap: 10px; }
-            .navbar .usuario-info { display: flex; flex-wrap: wrap; gap: 8px; }
+            .navbar h1 { font-size: 21px; }
+            .btn-salir { margin-left: 0; }
             .split-layout { display: grid; grid-template-columns: 1fr; overflow: visible; }
             .panel-lista { width: 100%; max-height: 360px; }
             .panel-detalle { min-height: 360px; overflow: visible; }

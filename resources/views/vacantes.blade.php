@@ -37,13 +37,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             border-bottom: 4px solid var(--uptex-rojo);
             z-index: 10;
         }
 
         .navbar h1 { color: var(--uptex-verde); margin: 0; font-size: 24px; font-weight: 800; }
-        .navbar .usuario-info { font-weight: 600; font-size: 14px; }
+        .navbar .usuario-info { font-weight: 600; font-size: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
         .btn-salir { color: var(--uptex-rojo); text-decoration: none; margin-left: 15px; font-weight: bold; }
 
         /* Contenedor Principal */
@@ -196,11 +198,11 @@
 
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: none; align-items: center; justify-content: center; z-index: 50; padding: 20px; }
         .modal-overlay.activo { display: flex; }
-        .modal-contenido { background: white; width: min(560px, 100%); border-radius: 8px; box-shadow: 0 18px 50px rgba(0,0,0,0.25); overflow: hidden; }
+        .modal-contenido { background: white; width: min(560px, 100%); max-height: calc(100vh - 32px); border-radius: 8px; box-shadow: 0 18px 50px rgba(0,0,0,0.25); overflow: hidden; display: flex; flex-direction: column; }
         .modal-header { background: var(--uptex-verde); color: white; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; }
         .modal-header h3 { margin: 0; font-size: 18px; }
         .modal-cerrar { background: transparent; border: 0; color: white; font-size: 20px; cursor: pointer; }
-        .modal-body { padding: 20px; }
+        .modal-body { padding: 20px; overflow-y: auto; }
         .campo { margin-bottom: 14px; }
         .campo label { display: block; font-size: 13px; font-weight: 700; color: var(--texto-oscuro); margin-bottom: 6px; }
         .campo input, .campo textarea { width: 100%; box-sizing: border-box; border: 1px solid var(--borde-color); border-radius: 5px; padding: 10px 12px; font-size: 14px; font-family: inherit; }
@@ -215,7 +217,8 @@
             body { height: auto; min-height: 100vh; overflow: auto; }
             .main-container { padding: 16px; overflow: visible; }
             .navbar { padding: 14px 16px; align-items: flex-start; gap: 10px; }
-            .navbar .usuario-info { display: flex; flex-wrap: wrap; gap: 8px; }
+            .navbar h1 { font-size: 21px; }
+            .btn-salir { margin-left: 0; }
             .buscador-principal { flex-direction: column; }
             .btn-buscar { padding: 12px; }
             .split-layout { display: grid; grid-template-columns: 1fr; overflow: visible; }

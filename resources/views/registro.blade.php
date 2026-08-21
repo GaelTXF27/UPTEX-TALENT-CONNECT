@@ -26,6 +26,7 @@
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
+            overflow-y: auto;
         }
 
         .registro-container {
@@ -177,6 +178,13 @@
 
         .requisitos-contrasena li.invalido {
             color: var(--uptex-rojo);
+        }
+
+        @media (max-width: 576px) {
+            body { align-items: flex-start; padding: 14px; }
+            .registro-container { padding: 26px 18px; }
+            .encabezado h1 { font-size: 28px; }
+            .btn-principal { font-size: 14px; white-space: normal; }
         }
     </style>
 </head>

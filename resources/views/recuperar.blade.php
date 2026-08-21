@@ -20,8 +20,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
         }
         .recuperar-container {
             background-color: var(--uptex-blanco);
@@ -31,6 +34,13 @@
             width: 100%;
             max-width: 420px;
             border-top: 6px solid var(--uptex-rojo); 
+        }
+
+        @media (max-width: 576px) {
+            body { align-items: flex-start; padding: 14px; }
+            .recuperar-container { padding: 26px 18px; }
+            .encabezado h1 { font-size: 28px; }
+            .btn-principal { font-size: 14px; white-space: normal; }
         }
         .encabezado { text-align: center; margin-bottom: 25px; }
         .encabezado h1 { color: var(--uptex-verde); margin: 0; font-size: 32px; font-weight: 800; }
