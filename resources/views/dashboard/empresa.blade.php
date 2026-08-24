@@ -50,6 +50,16 @@
         .sidebar-transition { transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .fade-in { animation: fadeIn 0.4s ease-out forwards; }
         .mobile-menu-trigger { display: none; }
+        .chart-mobile-frame {
+            position: relative;
+            width: 100%;
+            min-height: 16rem;
+        }
+        .chart-mobile-frame canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
         
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(15px); }
@@ -163,6 +173,11 @@
 
             .tab-content {
                 min-width: 0;
+            }
+
+            .chart-mobile-frame {
+                height: 18rem !important;
+                min-height: 18rem;
             }
         }
     </style>
@@ -351,7 +366,7 @@
                                 <h3 class="text-sm font-bold text-gray-700 mb-4 flex items-center justify-between">
                                     Perfiles Demandados <span class="text-xs font-normal text-gray-400">(Por Carrera)</span>
                                 </h3>
-                                <div class="relative h-64 w-full">
+                                <div class="chart-mobile-frame h-64">
                                     <canvas id="graficaPerfiles"></canvas>
                                 </div>
                             </div>
@@ -360,7 +375,7 @@
                                 <h3 class="text-sm font-bold text-gray-700 mb-4 flex items-center justify-between">
                                     Actividad de Postulaciones <span class="text-xs font-normal text-gray-400">(Ultimos 6 meses)</span>
                                 </h3>
-                                <div class="relative h-64 w-full">
+                                <div class="chart-mobile-frame h-64">
                                     <canvas id="graficaEvolucion"></canvas>
                                 </div>
                             </div>
@@ -370,7 +385,7 @@
                                     <h3 class="text-sm font-bold text-gray-700">Estado Actual del Embudo de Contratacion</h3>
                                 </div>
                                 <div class="flex flex-col md:flex-row items-center gap-8">
-                                    <div class="relative h-48 w-full md:w-1/3 flex-shrink-0">
+                                    <div class="chart-mobile-frame h-48 w-full md:w-1/3 flex-shrink-0">
                                         <canvas id="graficaEmbudo"></canvas>
                                     </div>
                                     <div class="w-full grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -1155,7 +1170,19 @@
                     hoverOffset: 8
                 }]
             }, { cutout: '65%' });
+            redimensionarGraficasEmpresa();
         }
+
+        function redimensionarGraficasEmpresa() {
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    Object.values(charts).forEach(chart => chart?.resize());
+                }, 120);
+            });
+        }
+
+        window.addEventListener('resize', redimensionarGraficasEmpresa);
+        window.addEventListener('orientationchange', redimensionarGraficasEmpresa);
 
         function crearChart(canvasId, type, data, extraOptions = {}) {
             const ctx = document.getElementById(canvasId).getContext('2d');

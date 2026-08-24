@@ -278,6 +278,12 @@
         .chart-box {
             position: relative;
             height: 260px;
+            min-height: 260px;
+        }
+        .chart-box canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
         }
 
         .tab-content { width: 100%; min-width: 0; }
@@ -313,6 +319,8 @@
             .acciones-exportar { width: 100%; }
             .btn-exportar { flex: 1 1 145px; justify-content: center; }
             .charts-grid { grid-template-columns: 1fr; }
+            .chart-container { min-height: 340px; }
+            .chart-box { height: 280px; min-height: 280px; }
             .perfil-grid { grid-template-columns: 1fr; }
         }
 
@@ -1095,7 +1103,19 @@
             crearGrafica('graficaCarreras', 'bar', graficasData.carreras, '#006837');
             crearGrafica('graficaEmpresas', 'bar', graficasData.empresas, '#5bc0de');
             crearGrafica('graficaVacantes', 'doughnut', graficasData.vacantes, ['#006837', '#85b998', '#C1272D', '#d97e81', '#1a2226']);
+            redimensionarGraficasEgresado();
         }
+
+        function redimensionarGraficasEgresado() {
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    Object.values(charts).forEach(chart => chart?.resize());
+                }, 120);
+            });
+        }
+
+        window.addEventListener('resize', redimensionarGraficasEgresado);
+        window.addEventListener('orientationchange', redimensionarGraficasEgresado);
     </script>
 </body>
 </html>

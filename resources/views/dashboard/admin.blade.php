@@ -50,6 +50,16 @@
         .sidebar-transition { transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         .mobile-menu-trigger { display: none; }
+        .chart-mobile-frame {
+            position: relative;
+            width: 100%;
+            min-height: 16rem;
+        }
+        .chart-mobile-frame canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
         
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -110,6 +120,11 @@
 
             .tab-content {
                 min-width: 0;
+            }
+
+            .chart-mobile-frame {
+                height: 18rem !important;
+                min-height: 18rem;
             }
         }
     </style>
@@ -267,19 +282,19 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                             <h3 class="text-sm font-bold text-gray-600 mb-4 text-center">Carreras con Mayor Contratacion</h3>
-                            <div class="relative h-64 w-full">
+                            <div class="chart-mobile-frame h-64">
                                 <canvas id="graficaCarreras"></canvas>
                             </div>
                         </div>
                         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                             <h3 class="text-sm font-bold text-gray-600 mb-4 text-center">Empresas Mas Activas</h3>
-                            <div class="relative h-64 w-full">
+                            <div class="chart-mobile-frame h-64">
                                 <canvas id="graficaEmpresas"></canvas>
                             </div>
                         </div>
                         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 lg:col-span-2 xl:col-span-1">
                             <h3 class="text-sm font-bold text-gray-600 mb-4 text-center">Tipos de Vacantes</h3>
-                            <div class="relative h-64 w-full">
+                            <div class="chart-mobile-frame h-64">
                                 <canvas id="graficaVacantes"></canvas>
                             </div>
                         </div>
@@ -752,7 +767,19 @@
             crearGrafica('graficaCarreras', 'bar', graficasData.carreras || sinDatos, '#006837');
             crearGrafica('graficaEmpresas', 'bar', graficasData.empresas || sinDatos, '#5bc0de');
             crearGrafica('graficaVacantes', 'doughnut', graficasData.vacantes || sinDatos, ['#006837', '#28a745', '#C1272D', '#ffc107', '#17a2b8']);
+            redimensionarGraficasAdmin();
         }
+
+        function redimensionarGraficasAdmin() {
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    Object.values(charts).forEach(chart => chart?.resize());
+                }, 120);
+            });
+        }
+
+        window.addEventListener('resize', redimensionarGraficasAdmin);
+        window.addEventListener('orientationchange', redimensionarGraficasAdmin);
 
         async function exportarPDFAdmin() {
             if (!datosDashboardAdmin) {
