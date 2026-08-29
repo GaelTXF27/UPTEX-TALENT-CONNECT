@@ -60,6 +60,7 @@ class PostulacionTest extends TestCase
             'estado' => 'Pendiente',
         ]);
 
+        $this->assertStringStartsWith('cvs/', $response->json('postulacion.cv_path'));
         Storage::disk('public')->assertExists($response->json('postulacion.cv_path'));
     }
 }

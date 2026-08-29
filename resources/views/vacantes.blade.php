@@ -196,22 +196,27 @@
         .btn-postular { background-color: var(--uptex-verde); color: white; border: none; padding: 12px 25px; font-size: 16px; font-weight: bold; border-radius: 5px; cursor: pointer; display: inline-block; margin-top: 10px; }
         .btn-postular:hover { background-color: #004d28; }
 
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: none; align-items: center; justify-content: center; z-index: 50; padding: 20px; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: none; align-items: center; justify-content: center; z-index: 50; padding: 20px; overflow: hidden; overscroll-behavior: contain; }
         .modal-overlay.activo { display: flex; }
-        .modal-contenido { background: white; width: min(560px, 100%); max-height: calc(100vh - 32px); border-radius: 8px; box-shadow: 0 18px 50px rgba(0,0,0,0.25); overflow: hidden; display: flex; flex-direction: column; }
+        .modal-contenido { background: white; width: min(560px, 100%); height: min(720px, calc(100dvh - 32px)); max-height: calc(100dvh - 32px); border-radius: 8px; box-shadow: 0 18px 50px rgba(0,0,0,0.25); overflow: hidden; display: flex; flex-direction: column; }
+        .modal-contenido form { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
         .modal-header { background: var(--uptex-verde); color: white; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; }
         .modal-header h3 { margin: 0; font-size: 18px; }
         .modal-cerrar { background: transparent; border: 0; color: white; font-size: 20px; cursor: pointer; }
-        .modal-body { padding: 20px; overflow-y: auto; }
+        .modal-body { padding: 20px; overflow-y: auto; flex: 1 1 auto; min-height: 0; -webkit-overflow-scrolling: touch; }
         .campo { margin-bottom: 14px; }
         .campo label { display: block; font-size: 13px; font-weight: 700; color: var(--texto-oscuro); margin-bottom: 6px; }
         .campo input, .campo textarea { width: 100%; box-sizing: border-box; border: 1px solid var(--borde-color); border-radius: 5px; padding: 10px 12px; font-size: 14px; font-family: inherit; }
         .campo textarea { min-height: 90px; resize: vertical; }
-        .modal-acciones { display: flex; justify-content: flex-end; gap: 10px; padding: 16px 20px; border-top: 1px solid var(--borde-color); background: #fafafa; }
+        .modal-acciones { display: flex; justify-content: flex-end; gap: 10px; padding: 16px 20px; border-top: 1px solid var(--borde-color); background: #fafafa; flex: 0 0 auto; }
         .btn-secundario { background: white; color: var(--texto-mutado); border: 1px solid var(--borde-color); padding: 10px 16px; border-radius: 5px; font-weight: 700; cursor: pointer; }
         .mensaje-postulacion { margin-top: 10px; font-weight: 700; font-size: 14px; }
         .mensaje-postulacion.error { color: var(--uptex-rojo); }
         .mensaje-postulacion.exito { color: var(--uptex-verde); }
+        .detalle-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+        .detalle-dato { background: var(--fondo-gris); border: 1px solid var(--borde-color); border-radius: 8px; padding: 12px; min-width: 0; }
+        .detalle-dato strong { display: block; color: var(--texto-oscuro); font-size: 12px; margin-bottom: 5px; text-transform: uppercase; }
+        .detalle-dato span { display: block; color: var(--texto-mutado); font-size: 14px; overflow-wrap: anywhere; }
 
         @media (max-width: 900px) {
             body { height: auto; min-height: 100vh; overflow: auto; }
@@ -224,6 +229,11 @@
             .split-layout { display: grid; grid-template-columns: 1fr; overflow: visible; }
             .panel-lista { width: 100%; max-height: 380px; }
             .panel-detalle { min-height: 420px; overflow: visible; }
+            .modal-overlay { align-items: center; padding: 12px; }
+            .modal-contenido { width: 100%; height: calc(100dvh - 24px); max-height: calc(100dvh - 24px); }
+            .modal-body { padding: 16px; }
+            .modal-acciones { flex-direction: column-reverse; }
+            .modal-acciones button { width: 100%; }
         }
 
         /* Custom Scrollbar */
@@ -478,15 +488,74 @@
         const requerimientos = vacante.requerimientos || 'No se especificaron requerimientos adicionales.';
         const aptitudes = vacante.aptitudes || 'No se especificaron aptitudes adicionales.';
         const salarioInfo = formatearSalario(vacante);
+        const tipoContrato = vacante.tipo_contrato || vacante.contrato || 'No especificado';
+        const categoria = vacante.categoria || vacante.perfil || 'No especificada';
+        const ubicacion = vacante.ubicacion || vacante.direccion || 'No especificada';
+        const jornada = vacante.tipo_jornada || vacante.tipo || 'No especificada';
+        const sector = vacante.sector || 'No especificado';
+        const experiencia = vacante.experiencia || 'No especificada';
+        const aptoDiscapacidad = vacante.apto_discapacidad ? 'Si' : 'No especificado';
+        const salarioComisiones = vacante.salario_comisiones || 'No especificado';
 
         panelDetalle.innerHTML = `
             <div class="detalle-header">
                 <h2>${escaparHtml(vacante.puesto || 'Vacante sin titulo')}</h2>
                 <div class="empresa"><i class="fas fa-building"></i> ${escaparHtml(vacante.empresa || 'Empresa no especificada')}</div>
                 <div class="badges-container">
-                    <span class="badge"><i class="fas fa-map-marker-alt"></i> ${escaparHtml(vacante.ubicacion || 'Remoto')}</span>
-                    <span class="badge"><i class="fas fa-clock"></i> ${escaparHtml(vacante.tipo_jornada || 'Tiempo Completo')}</span>
+                    <span class="badge"><i class="fas fa-map-marker-alt"></i> ${escaparHtml(ubicacion)}</span>
+                    <span class="badge"><i class="fas fa-clock"></i> ${escaparHtml(jornada)}</span>
+                    <span class="badge"><i class="fas fa-file-contract"></i> ${escaparHtml(tipoContrato)}</span>
                     <span class="badge"><i class="fas fa-money-bill"></i> ${escaparHtml(salarioInfo)}</span>
+                </div>
+            </div>
+
+            <div class="detalle-seccion">
+                <h3>Datos de la vacante</h3>
+                <div class="detalle-grid">
+                    <div class="detalle-dato">
+                        <strong>Puesto</strong>
+                        <span>${escaparHtml(vacante.puesto || 'No especificado')}</span>
+                    </div>
+                    <div class="detalle-dato">
+                        <strong>Empresa</strong>
+                        <span>${escaparHtml(vacante.empresa || 'Empresa no especificada')}</span>
+                    </div>
+                    <div class="detalle-dato">
+                        <strong>Categoria</strong>
+                        <span>${escaparHtml(categoria)}</span>
+                    </div>
+                    <div class="detalle-dato">
+                        <strong>Jornada</strong>
+                        <span>${escaparHtml(jornada)}</span>
+                    </div>
+                    <div class="detalle-dato">
+                        <strong>Tipo de contrato</strong>
+                        <span>${escaparHtml(tipoContrato)}</span>
+                    </div>
+                    <div class="detalle-dato">
+                        <strong>Sueldo ofrecido</strong>
+                        <span>${escaparHtml(salarioInfo)}</span>
+                    </div>
+                    <div class="detalle-dato">
+                        <strong>Ubicacion</strong>
+                        <span>${escaparHtml(ubicacion)}</span>
+                    </div>
+                    <div class="detalle-dato">
+                        <strong>Sector</strong>
+                        <span>${escaparHtml(sector)}</span>
+                    </div>
+                    <div class="detalle-dato">
+                        <strong>Experiencia</strong>
+                        <span>${escaparHtml(experiencia)}</span>
+                    </div>
+                    <div class="detalle-dato">
+                        <strong>Apto discapacidad</strong>
+                        <span>${escaparHtml(aptoDiscapacidad)}</span>
+                    </div>
+                    <div class="detalle-dato">
+                        <strong>Salario/comisiones</strong>
+                        <span>${escaparHtml(salarioComisiones)}</span>
+                    </div>
                 </div>
             </div>
 
