@@ -68,6 +68,12 @@
             margin-left: var(--sidebar-width);
             width: calc(100% - var(--sidebar-width));
             overflow-x: hidden;
+            transition: margin-left 0.3s ease, width 0.3s ease;
+        }
+
+        .sidebar.oculto + .wrapper {
+            margin-left: 0;
+            width: 100%;
         }
 
         .navbar {
@@ -511,6 +517,7 @@
 
     <script>
         let datosDashboardActuales = null;
+        const charts = {};
         let notificacionesActuales = [];
         let notificacionesLeidas = sessionStorage.getItem('egresado_notificaciones_leidas') === '1';
 
@@ -552,6 +559,7 @@
 
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('oculto');
+            setTimeout(redimensionarGraficasEgresado, 320);
         }
 
         function cambiarPestana(tabId, boton) {
@@ -1048,7 +1056,11 @@
             Chart.defaults.font.family = 'Inter, Segoe UI, sans-serif';
             Chart.defaults.color = '#68746f';
 
-            new Chart(contexto, {
+            if (charts[canvasId]) {
+                charts[canvasId].destroy();
+            }
+
+            charts[canvasId] = new Chart(contexto, {
                 type: tipo,
                 data: {
                     labels: grafica.etiquetas,
